@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo "package $2" > "$4"
+echo >> "$4"
+echo "type $3 struct {" >> "$4"
+egrep '^func \(' "$1" | sed -E 's/^func \([^\)]+) ([^\(]+)(.*)\{/	\1 func\2/' >> "$4"
+echo "}" >> "$4"

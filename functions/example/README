@@ -1,0 +1,28 @@
+# Examples on how to use type-safe RPC functions
+
+This is using github.com/tiborvass/tell/functions.
+
+To test the client and server implementations:
+
+	$ go run ./server/{server,rpc}.go &
+	$ go run ./client/client.go 
+	server: F1([104 101 108 108 111 32 119 111 114 108 100], false, 24) -> ("hello world", 25)
+	client: results = "hello world", 25
+	server: F2()
+	client: exiting
+
+Or you can run the server and the client in separate terminal windows.
+
+The reason why client.go can call typesafe functions rpc.F1 and rpc.F2 is because
+those have been defined not only on the server side where the functions are implemented,
+but also on the client side.
+
+Prior to Go 1.4, it would be necessary to change both files at once.
+With Go 1.4, you can change server/rpc.go by adding new functions, changing the signatures,
+and then running the following:
+
+	$ # edit ./server/rpc.go to your will
+	$ go generate ./server
+	$ go run ./server/{server,rpc.go} &
+	$ # you can now edit ./client/client.go to make use of the changes
+	$ go run ./client/client.go
